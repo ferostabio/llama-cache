@@ -5,10 +5,11 @@ import dotenv from "dotenv";
 
 import {
   connectToRedis,
-  getLlamaFinancials,
+  getFinancials,
   saveDataToRedis,
+  saveStakingDataToRedis,
 } from "./helpers/redis.ts";
-import { fetchFinancialsApi } from "./helpers/api.ts";
+import { fetchFinancialsApi, fetchStakingData } from "./helpers/api.ts";
 import { FIFTEEN_MINUTES, PORT } from "./helpers/constants.ts";
 import { logger } from "./helpers/logger.ts";
 
@@ -24,12 +25,12 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.get("/llama_financials", async (_: Request, res: Response) => {
+app.get("/financials", async (_: Request, res: Response) => {
   try {
-    const responseData = await getLlamaFinancials();
+    const responseData = await getFinancials();
     res.json(responseData);
   } catch (err) {
-    logger.error("Server error:", err);
+    // No need to log, we already do on inner functions
     res.status(500).json({ error: "Error retrieving data" });
   }
 });
@@ -50,6 +51,9 @@ async function fetchDataAndSaveToRedis(): Promise<void> {
   try {
     const data = await fetchFinancialsApi();
     saveDataToRedis(data);
+
+    const stakingData = await fetchStakingData();
+    saveStakingDataToRedis(stakingData);
   } catch {
     logger.error("Error fetching or saving data");
   }
