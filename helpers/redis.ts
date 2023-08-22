@@ -46,9 +46,10 @@ export async function getFinancials(): Promise<Data> {
     const stakingApys: StakingResponse[] =
       typeof stakingApyRaw === "object"
         ? Object.keys(stakingApyRaw as any).map((key) => {
+            const parsedData = JSON.parse((stakingApyRaw as any)[key]);
             return {
               symbol: key,
-              value: parseFloat((stakingApyRaw as any)[key]),
+              value: parsedData.value, // No need for any other data here
             };
           })
         : [];
@@ -89,9 +90,15 @@ export function saveDataToRedis(data: Data): void {
 export function saveStakingDataToRedis(data: StakingResponse[]): void {
   try {
     data.forEach(async (d) => {
-      await client.hSet(REDIS_KEY.STAKING_APY, d.symbol, d.value.toString());
+      // We probably need validation for the data we're saving
+      const value = JSON.stringify({
+        value: d.value,
+        data: d.data,
+      });
+      await client.hSet(REDIS_KEY.STAKING_APY, d.symbol, value);
     });
     client.expire(REDIS_KEY.STAKING_APY, THREE_DAYS_IN_SECONDS);
+    logger.info("Saved staking data to Redis");
   } catch (error) {
     logger.error("Failed to save staking data to Redis:", error);
     throw error;
