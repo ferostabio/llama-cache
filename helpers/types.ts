@@ -20,4 +20,5 @@ export type StakingRequest = {
 export type StakingResponse = {
   symbol: string;
   value: number;
+  data?: any; // Since we're calling different APIs, let's store the raw data just in case
 };

@@ -18,9 +18,13 @@ export enum REDIS_KEY {
   STAKING_APY = "stakingApy",
 }
 
-export const STAKING_REQUESTS: StakingRequest[] = [
-  {
-    url: "https://universe.staderlabs.com/polygon/apy",
-    symbol: "MATICX",
-  },
-];
+export enum STAKING_SERVICE {
+  MATICX = "MATICX",
+  WSTETH = "WSTETH",
+}
+
+export const STAKING_URL: Record<STAKING_SERVICE, string> = {
+  [STAKING_SERVICE.MATICX]: "https://universe.staderlabs.com/polygon/apy",
+  [STAKING_SERVICE.WSTETH]:
+    "https://eth-api.lido.fi/v1/protocol/steth/apr/last",
+};

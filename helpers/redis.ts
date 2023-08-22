@@ -53,7 +53,7 @@ export async function getFinancials(): Promise<Data> {
           })
         : [];
 
-    // Update pools with staking rewards
+    // Update pools with staking rewards. Might have to improve based on more checks than just symbol
     pools.forEach((pool: any) => {
       const match = stakingApys.find((apy) => apy.symbol === pool.symbol);
       if (match) {
