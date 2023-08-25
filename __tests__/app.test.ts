@@ -21,9 +21,10 @@ describe("Express App API", () => {
   it("API should fetch staking data", async () => {
     const result = await fetchStakingData();
 
-    expect(result).toHaveLength(2);
+    expect(result).toHaveLength(3);
     expect(result[0].symbol).toEqual(STAKING_SERVICE.MATICX);
     expect(result[1].symbol).toEqual(STAKING_SERVICE.WSTETH);
+    expect(result[2].symbol).toEqual(STAKING_SERVICE.RETH);
   });
 
   it("Redis should return proper json", async () => {

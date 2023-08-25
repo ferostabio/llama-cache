@@ -21,10 +21,12 @@ export enum REDIS_KEY {
 export enum STAKING_SERVICE {
   MATICX = "MATICX",
   WSTETH = "WSTETH",
+  RETH = "RETH",
 }
 
 export const STAKING_URL: Record<STAKING_SERVICE, string> = {
   [STAKING_SERVICE.MATICX]: "https://universe.staderlabs.com/polygon/apy",
   [STAKING_SERVICE.WSTETH]:
     "https://eth-api.lido.fi/v1/protocol/steth/apr/last",
+  [STAKING_SERVICE.RETH]: "https://api.rocketpool.net/api/apr",
 };

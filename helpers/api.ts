@@ -49,6 +49,10 @@ export async function fetchStakingData(): Promise<StakingResponse[]> {
         const value = data.data.apr;
         return { symbol: STAKING_SERVICE.WSTETH, value, data };
       }),
+      axios.get(STAKING_URL.RETH).then(({ data }) => {
+        const value = parseFloat(data.yearlyAPR);
+        return { symbol: STAKING_SERVICE.RETH, value };
+      }),
     ]);
     logger.info("Completed requests to staking API");
     return data;
